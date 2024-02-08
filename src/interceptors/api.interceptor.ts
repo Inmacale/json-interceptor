@@ -9,22 +9,22 @@ export class ApiInterceptor implements HttpInterceptor {
     constructor(private http: HttpClient) { }
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        const apiUrl = 'https://api.example.com/data'; // URL de la API
+        const apiUrl = 'https://api.example.com/data';
 
         if (request.url === apiUrl) {
-            // Si la solicitud es para la URL de la API, carga el JSON externo
-            return this.http.get<any>('/mocks/data.json').pipe(
-                // Procesa la respuesta como un evento HTTP
+
+            return this.http.get<any>('assets/mocks/data.json').pipe(
+
                 map((data) => {
                     const response = new HttpResponse({
                         body: data,
-                        status: 200 // Simula un estado 200 OK
+                        status: 200
                     });
                     return response;
                 })
             );
         } else {
-            // Si no es la URL de la API, pasa la solicitud al siguiente manipulador
+
             return next.handle(request);
         }
     }
