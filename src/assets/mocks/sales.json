@@ -1,0 +1,20 @@
+[
+    {
+        "id": 1,
+        "producto": "Producto 1",
+        "cantidad": 2,
+        "total": 21.98
+    },
+    {
+        "id": 2,
+        "producto": "Producto 2",
+        "cantidad": 1,
+        "total": 19.99
+    },
+    {
+        "id": 3,
+        "producto": "Producto 3",
+        "cantidad": 3,
+        "total": 17.97
+    }
+]

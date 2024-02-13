@@ -1,38 +1,35 @@
 // api.interceptor.ts
-import { Inject, Injectable } from '@angular/core';
-import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HttpClient, HttpResponse } from '@angular/common/http';
-import { Observable, map } from 'rxjs';
+import { Injectable } from '@angular/core';
+import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HttpResponse, HttpClient } from '@angular/common/http';
+import { Observable, catchError, from, map, mergeMap, of } from 'rxjs';
 
 @Injectable()
 export class ApiInterceptor implements HttpInterceptor {
 
-    urls: { path: string; file: string }[] = [
-        { path: 'data', file: 'data' }
-    ]
+    private endpoints: { [key: string]: string } = {
+        'data': './assets/mocks/data.json',
+        'users': './assets/mocks/users.json',
+        'products': './assets/mocks/products.json',
+        'sales': './assets/mocks/sales.json',
+
+    };
 
     constructor(private http: HttpClient) { }
 
+
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        //un if con enviroment este a true
+        const endpoint = this.endpoints[request.url];
 
-        this.urls.forEach(url => {
-            if (request.url.includes(url.path)) {
-                return this.http.get<any>('assets/mocks/' + url.file + '.json').pipe(
-                    map((data) => {
-                        const response = new HttpResponse({
-                            body: data,
-                            status: 200
-                        });
-                        console.log(response)
-                        return response;
-                    })
-                );
-            } else {
+        if (endpoint) {
+            return this.handleMockRequest(endpoint);
+        } else {
+            return next.handle(request);
+        }
+    }
 
-                return next.handle(request);
-            }
-        });
-
-
+    private handleMockRequest(endpoint: string): Observable<HttpEvent<any>> {
+        return this.http.get<any>(endpoint).pipe(
+            map(data => new HttpResponse({ status: 200, body: data }))
+        );
     }
 }

@@ -10,14 +10,19 @@ export class AppComponent implements OnInit {
   constructor(private http: HttpClient) { }
 
   ngOnInit(): void {
-    const apiUrl = 'https://api.example.com/data';
-    this.http.get(apiUrl).subscribe(
-      data => {
-        console.log('JSON recibido:', data);
-      },
-      error => {
-        console.error('Error al obtener el JSON:', error);
-      }
-    );
+
+
+    this.http.get('data').subscribe((response) => {
+      console.log('Respuesta del endpoint /api/datos:', response);
+    });
+    this.http.get('users').subscribe((response) => {
+      console.log('Respuesta del endpoint /api/usuarios:', response);
+    });
+    this.http.get('products').subscribe((response) => {
+      console.log('Respuesta del endpoint /api/usuarios:', response);
+    });
+    this.http.get('sales').subscribe((response) => {
+      console.log('Respuesta del endpoint /api/usuarios:', response);
+    });
   }
 }
